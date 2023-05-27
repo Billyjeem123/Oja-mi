@@ -44,7 +44,7 @@ abstract class SharedModel
         return $data;
     }
 
-    public function saveProfileImage(array $profileImage): array
+    public function uploadImageToServer(array $profileImage): array
     {
         $imageInfo = [];
 
@@ -72,7 +72,7 @@ abstract class SharedModel
             } else {
                 #   Save the profile image file
                 $newProfileImageName = time() . '_' . $profileImageName;
-                $profileImagePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $newProfileImageName;
+                $profileImagePath = $_SERVER['DOCUMENT_ROOT'] . '/Oja-mi/uploads/' . $newProfileImageName;
                 if (!file_exists($profileImagePath) || !is_readable($profileImageTmp)) {
                     http_response_code(422);
                     $this->outputData(false, 'Unable to upload the profile image. Please try again later.', null);
