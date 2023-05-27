@@ -193,6 +193,75 @@ class Users extends SharedModel
         }
     }
 
+
+    #VerifyOtp::This method verifies  a user OTP during verification
+
+    public function verifyOtp(array $data)
+    {
+
+        try {
+            $sql = 'SELECT * FROM tblusers WHERE  mail = :mail';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':mail', $data['mail'], PDO::PARAM_STR);
+            if (!$stmt->execute()) {
+                return false;
+            }
+
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($user['otp'] != $data['otp']) {
+                $this->outputData(false, 'Please enter your correct OTP..', null);
+                exit();
+            }
+            if (!$this->activateAccount($data['mail'])) {
+
+                $this->outputData(false, $_SESSION['err'], null);
+                exit();
+            }
+            $userData = [
+                'name' => $user['name'],
+                    'mail' => $user['mail'],
+                    'usertoken' => $user['usertoken'],
+                    'regStatus' => ($user['status'] == 1) ? true : false,
+                    'userType' => $user['userType'],
+                    'RegisteredOn' => $this->formatDate($user['time'])
+
+            ];
+        } catch (PDOException $e) {
+            $_SESSION['err'] = $e->getMessage();
+            $this->respondWithInternalError($_SESSION['err']);
+        } finally {
+            $stmt = null;
+            $this->conn = null;
+        }
+
+        return $userData;
+    }
+
+    #This methid activates User account if during registration verification
+
+    public  function activateAccount($mail)
+    {
+        try {
+            $status = 1;
+            $sql = ' UPDATE tblusers SET status = :status WHERE  mail = :mail';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':mail', $mail);
+            if (!$stmt->execute()) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (PDOException $e) {
+            $this->outputData(false, $_SESSION['err'] = $e->getMessage(), null);
+            return false;
+        } finally {
+            $stmt = null;
+            $this->conn = null;
+        }
+    }
+
+
     #Update Password:: This function updates a user Password
 
     public function updatePassword(array $data): void
