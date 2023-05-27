@@ -1,0 +1,2 @@
+[2023-05-27 23:21:45] Error sending mail  for Users::registerUser  
+Error Message: SMTP Error: Could not connect to SMTP host. Failed to connect to server in C:\xampp\htdocs\Oja-mi\vendor\phpmailer\phpmailer\src\PHPMailer.php on line 2233
