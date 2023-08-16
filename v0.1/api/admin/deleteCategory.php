@@ -15,7 +15,7 @@ $validKeys = [ 'catid'];
 if (!$Category->validateRequiredParams($data, $validKeys)) {
     return;
 }
-$createCategory  = $Category->deleteCategory( $data );
+$createCategory  = $Category->deleteCategory( $data['catid'] );
 unset( $Category );
 unset( $db );
 

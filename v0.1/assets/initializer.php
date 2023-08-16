@@ -15,7 +15,7 @@ use Dotenv\Dotenv;
 $envMinePath = $_SERVER['DOCUMENT_ROOT'] . '/Oja-mi/env.mine';
 $envMinePath = str_replace('\\', '/', $envMinePath);
 
-$dotenv = Dotenv::createImmutable(dirname($envMinePath),  '.env.mine');
+$dotenv = Dotenv::createImmutable(dirname($envMinePath),'.env.mine');
 $dotenv->load();
 
 
